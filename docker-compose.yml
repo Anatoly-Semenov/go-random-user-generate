@@ -1,0 +1,18 @@
+version: "3"
+services:
+  users_db:
+    container_name: random_users_db_golang
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - "/etc/postgresql"
+      - "/var/log/postgresql"
+      - "/var/lib/postgresql"
+    environment:
+      POSTGRES_HOST: random_users_db
+      POSTGRES_PASSWORD: random_users_pass
+      POSTGRES_USER: random_users
+      POSTGRES_DB: random_users_db
+    ports:
+      - 5432:5432
