@@ -1,5 +1,7 @@
 package controllers
 
+import "github.com/julienschmidt/httprouter"
+
 type Controller interface {
-	Register()
+	Register(router *httprouter.Router)
 }

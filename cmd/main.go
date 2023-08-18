@@ -27,6 +27,10 @@ func main() {
 	router := httprouter.New()
 
 	userRepository := user.NewRepository(db)
+	userService := user.NewService(userRepository)
+
+	userController := user.NewController(userService)
+	userController.Register(router)
 
 	start(cfg, log, router)
 }
