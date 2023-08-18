@@ -1,0 +1,14 @@
+env: "local" # local | dev | prod
+
+https_server:
+  address: "localhost:8080"
+  timeout: 4s
+  iddle_timeout: 60s
+
+database:
+  dialect: postgres
+  host: 127.0.0.1
+  port: 5432
+  password: random_users_pass
+  user: random_users
+  db: random_users_db
