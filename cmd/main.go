@@ -1,13 +1,15 @@
-package cmd
+package main
 
 import (
+	"github.com/julienschmidt/httprouter"
 	"golang.org/x/exp/slog"
+	"net/http"
 	"os"
 	"user-service/internal/config"
 	"user-service/pkg/logger/handlers/slogpretty"
 )
 
-func Main() {
+func main() {
 	// Init config
 	cfg := config.GetConfig()
 
@@ -16,7 +18,29 @@ func Main() {
 
 	// init storage | gorm TODO
 
-	// Init router TODO
+	// Init router
+	router := httprouter.New()
+
+	start(cfg, log, router)
+}
+
+func start(cfg *config.Config, log *slog.Logger, router *httprouter.Router) {
+	// Run server
+	log.Info("Starting server", slog.String("Address", cfg.Address))
+
+	server := &http.Server{
+		Addr:         cfg.Address,
+		Handler:      router,
+		ReadTimeout:  cfg.HttpsSerer.Timeout,
+		WriteTimeout: cfg.HttpsSerer.Timeout,
+		IdleTimeout:  cfg.HttpsSerer.Iddle_timeout,
+	}
+
+	if err := server.ListenAndServe(); err != nil {
+		log.Error("Failed to start server")
+	}
+
+	log.Error("Server stopped")
 }
 
 func setupLogger(env config.Env) *slog.Logger {
